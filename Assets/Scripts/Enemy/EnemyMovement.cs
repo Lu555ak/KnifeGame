@@ -7,12 +7,16 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField]
     private LayerMask groundMask, playerMask;
-    private Transform player;
+    [SerializeField]
+    private float sightRange = 0.5f;
 
+    private Transform player;
     private NavMeshAgent enemy;
     private Vector3 walkPoint;
     private bool walkPointSet;
     private float walkPointRange;
+    private bool playerInSightRange;
+    
 
     private void Awake()
     {
@@ -28,7 +32,9 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Patroling();
+        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
+        if(playerInSightRange)
+            Patroling();
     }
 
     private void Patroling()
