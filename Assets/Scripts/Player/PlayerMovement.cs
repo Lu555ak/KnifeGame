@@ -22,15 +22,14 @@ public class PlayerMovement : MonoBehaviour
     private Transform groundCheck;
     private bool onGround;
 
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         controller = GetComponent<CharacterController>();
-        groundCheck = this.gameObject.transform.GetChild(4);
+        groundCheck = transform.GetChild(2);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         onGround = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
