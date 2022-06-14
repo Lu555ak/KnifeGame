@@ -5,18 +5,22 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField]
-    private LayerMask groundMask, playerMask;
-    [SerializeField]
-    private float sightRange = 0.5f;
+    public NavMeshAgent enemy;
+    public Transform player;
+    public LayerMask groundMask, playerMask;
 
-    private Transform player;
-    private NavMeshAgent enemy;
-    private Vector3 walkPoint;
-    private bool walkPointSet;
-    private float walkPointRange;
-    private bool playerInSightRange;
-    
+    //Patroling
+    public Vector3 walkPoint;
+    bool walkPointSet;
+    public float walkPointRange;
+
+    //Attacking
+    public float timeBetweenAttacks;
+    bool alreadyAttacked;
+
+    //States
+    public float sightRange, attackRange;
+    public bool playerInSightRange, playerInAttackRange;
 
     private void Awake()
     {
@@ -33,8 +37,11 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
-        if(playerInSightRange)
-            Patroling();
+        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
+
+        if (!playerInSightRange && !playerInAttackRange) Patroling();
+        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
+        if(playerInSightRange && playerInAttackRange) AttackPlayer();
     }
 
     private void Patroling()
@@ -61,5 +68,32 @@ public class EnemyMovement : MonoBehaviour
 
         if (Physics.Raycast(walkPoint, -transform.up, 2f, groundMask))
             walkPointSet = true;
+    }
+
+    private void ChasePlayer()
+    {
+        enemy.SetDestination(player.position);
+    }
+
+    private void AttackPlayer()
+    {
+        //Make sure enemy doesn't move
+        enemy.SetDestination(transform.position);
+
+        transform.LookAt(player);
+
+        if(!alreadyAttacked)
+        {
+            //attack code here
+
+
+            alreadyAttacked = true;
+            Invoke(nameof(ResetAttack), timeBetweenAttacks);
+        }
+    }
+
+    private void ResetAttack()
+    {
+        alreadyAttacked = false;
     }
 }
