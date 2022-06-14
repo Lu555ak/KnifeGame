@@ -10,7 +10,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (Input.GetMouseButtonDown(0) && other.CompareTag("Enemy"))
+        if (Input.GetMouseButtonDown(0) && other.CompareTag("Enemy") && Time.time > cooldownTimer)
         {
             other.gameObject.SetActive(false);
             cooldownTimer = cooldown + Time.time;
