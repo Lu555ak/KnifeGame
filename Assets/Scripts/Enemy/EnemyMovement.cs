@@ -72,7 +72,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (playerInNearSightRange && playerInLongSightRange)
         {
-            AttackPlayer();
+            SpotPlayer();
             if (Time.time > cooldownTimer)
             {
                 inSightMeter += inSight * inLongSightMultiplier;
@@ -117,7 +117,7 @@ public class EnemyMovement : MonoBehaviour
         enemy.SetDestination(player.position);
     }
 
-    private void AttackPlayer()
+    private void SpotPlayer()
     {
         //Make sure enemy doesn't move
         enemy.SetDestination(transform.position);
@@ -126,7 +126,7 @@ public class EnemyMovement : MonoBehaviour
 
         if(!alreadyAttacked)
         {
-            //attack code here
+            //spot player code here
             
 
             alreadyAttacked = true;
