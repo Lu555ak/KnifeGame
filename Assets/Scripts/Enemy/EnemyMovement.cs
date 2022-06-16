@@ -9,8 +9,6 @@ public class EnemyMovement : MonoBehaviour
     private NavMeshAgent agent;
     private Transform player;
 
-
-
     //Sight
     private float awarenessMeter;
     private float awarenessTimer;
@@ -24,8 +22,9 @@ public class EnemyMovement : MonoBehaviour
     private bool standing = false;
     private Vector3[] patrolPoints;
     private Vector3 destinationPoint;
-
-
+    public float awarenessNumber;
+    private bool noticeSFX = true;
+    public ParticleSystem deathEffect;
     private Camera enemyFOV;
 
     [Header("Detection Settings")]
@@ -67,7 +66,7 @@ public class EnemyMovement : MonoBehaviour
         AwarenessBar();
 
         if (currentState != EnemyState.Attacking)
-             AwarenessFall(1f);
+             AwarenessFall(awarenessNumber);
 
         if (standing == true)
 		{
@@ -139,7 +138,7 @@ public class EnemyMovement : MonoBehaviour
         {
             if (hit.transform == player && inFOV)
             {
-                AwarenessRaise(1f);
+                AwarenessRaise(awarenessNumber);
                 standing = true;
             }
             else if (standing == true)
@@ -196,6 +195,20 @@ public class EnemyMovement : MonoBehaviour
             bar.color = new Color32(0, 128, 0, 255);
         }
 
+        if(awarenessMeter > 0 & noticeSFX == true)
+		{
+            GetComponent<AudioSource>().Play();
+            noticeSFX = false;
+		}
+        if (awarenessMeter == 0)
+            noticeSFX = true;
+
         bar.fillAmount = awarenessMeter;
     }
+
+    public void DeathEffect()
+	{
+        Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+	}
 }

@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField]
-    private float cooldown = 1f;
+    private float cooldown = 2f;
     private float cooldownTimer = 0f;
     public Animator animator;
     public Animator animator2;
@@ -30,13 +29,14 @@ public class PlayerAttack : MonoBehaviour
         {
             if (enemyDetected == true && enemy != null)
 			{
-                enemy.gameObject.SetActive(false);
+                enemy.gameObject.GetComponent<EnemyMovement>().DeathEffect();
                 LevelHandler.enemyCount++;
             }
             cooldownTimer = cooldown + Time.time;
             animator.SetTrigger("Attack");
             animator2.SetTrigger("Attack");
             animator3.SetTrigger("Attack");
+            GetComponent<AudioSource>().Play();
         }
     }
 
