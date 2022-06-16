@@ -367,8 +367,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2ac4b11af08c684d8b4c66ad2e2b67d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  player: {fileID: 0}
   bar: {fileID: 7043459020754903196}
   sphereRadius: 18
 --- !u!1001 &7043459019746772601
@@ -437,7 +435,7 @@ PrefabInstance:
     - target: {fileID: -3642248809546156846, guid: 13058cc68f78d1f4d8a9d186e8e0007d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0e098c3a4bf5c9a45b115befb91fb439, type: 2}
+      objectReference: {fileID: 2100000, guid: 7b9c7b8b7bcb3e141b57c5042203b223, type: 2}
     - target: {fileID: 919132149155446097, guid: 13058cc68f78d1f4d8a9d186e8e0007d, type: 3}
       propertyPath: m_Name
       value: Enemy
