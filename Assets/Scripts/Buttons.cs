@@ -10,8 +10,18 @@ public class Buttons : MonoBehaviour
         Application.Quit();
     }
 
-    public void Play()
+    public void Level1()
     {
-        SceneManager.LoadScene("");
+        SceneManager.LoadScene("Level1");
+    }
+
+    public void Level2()
+    {
+        SceneManager.LoadScene("Level2");
+    }
+
+    public void Level3()
+    {
+        SceneManager.LoadScene("Level3");
     }
 }
