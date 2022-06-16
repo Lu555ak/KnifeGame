@@ -9,9 +9,22 @@ public class PlayerAttack : MonoBehaviour
     public Animator animator2;
     public Animator animator3;
     private bool enemyDetected;
-    private GameObject enemy;
+    private Collider enemy;
 
-    private void Update()
+	private void Start()
+	{
+        animator.gameObject.SetActive(false);
+        animator2.gameObject.SetActive(false);
+        animator3.gameObject.SetActive(false);
+        if (PlayerPrefs.GetInt("KnifeSelection") == 0)
+            animator.gameObject.SetActive(true);
+        else if (PlayerPrefs.GetInt("KnifeSelection") == 1)
+            animator2.gameObject.SetActive(true);
+        else if(PlayerPrefs.GetInt("KnifeSelection") == 2)
+            animator3.gameObject.SetActive(true);
+    }
+
+	private void Update()
     {
         if (Input.GetMouseButtonDown(0) && Time.time > cooldownTimer)
         {
@@ -29,7 +42,7 @@ public class PlayerAttack : MonoBehaviour
         if (other.CompareTag("Enemy"))
 		{
             enemyDetected = true;
-            enemy = other.gameObject;
+            enemy = other;
         }        
         else
 		{

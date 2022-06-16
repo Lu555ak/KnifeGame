@@ -1365,7 +1365,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 885582276}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: Level1
+        m_MethodName: Knife1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3036,7 +3036,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 885582276}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: Level3
+        m_MethodName: Knife3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3527,7 +3527,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 885582276}
         m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
-        m_MethodName: Level2
+        m_MethodName: Knife2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

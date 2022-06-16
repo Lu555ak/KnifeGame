@@ -94,7 +94,6 @@ public class EnemyMovement : MonoBehaviour
     private void ChooseDestinationPoint()
 	{
         destinationPoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
-        Debug.Log(Random.Range(0, patrolPoints.Length - 1));
     }
     private void DestinationPointReached()
 	{
@@ -179,7 +178,7 @@ public class EnemyMovement : MonoBehaviour
 	{
         if (awarenessMeter >= 1f)
         {
-            Debug.Log(":)");
+
         }
 
         if (awarenessMeter >= 0.76f)
@@ -196,12 +195,5 @@ public class EnemyMovement : MonoBehaviour
         }
 
         bar.fillAmount = awarenessMeter;
-    }
-
-	private void OnDrawGizmos()
-	{
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, sphereRadius);
-
     }
 }

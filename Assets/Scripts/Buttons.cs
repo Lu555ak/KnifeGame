@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Buttons : MonoBehaviour
 {
-    public void Quit()
+	public void Quit()
     {
         Application.Quit();
     }
@@ -23,5 +23,20 @@ public class Buttons : MonoBehaviour
     public void Level3()
     {
         SceneManager.LoadScene("Level3");
+    }
+
+    public void Knife1()
+	{
+        PlayerPrefs.SetInt("KnifeSelection", 0);
+	}
+
+    public void Knife2()
+    {
+        PlayerPrefs.SetInt("KnifeSelection", 1);
+    }
+
+    public void Knife3()
+    {
+        PlayerPrefs.SetInt("KnifeSelection", 2);
     }
 }
