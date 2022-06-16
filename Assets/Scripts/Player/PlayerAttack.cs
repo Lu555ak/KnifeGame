@@ -29,7 +29,10 @@ public class PlayerAttack : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && Time.time > cooldownTimer)
         {
             if (enemyDetected == true && enemy != null)
+			{
                 enemy.gameObject.SetActive(false);
+                LevelHandler.enemyCount++;
+            }
             cooldownTimer = cooldown + Time.time;
             animator.SetTrigger("Attack");
             animator2.SetTrigger("Attack");

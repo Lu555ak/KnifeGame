@@ -51,6 +51,8 @@ public class EnemyMovement : MonoBehaviour
         agent.autoBraking = false;
         GetPatrolPoints();
         ChooseDestinationPoint();
+
+        LevelHandler.maxEnemyCount++;
     }
 
     void Update()
@@ -178,7 +180,7 @@ public class EnemyMovement : MonoBehaviour
 	{
         if (awarenessMeter >= 1f)
         {
-
+            LevelHandler.ResetLevel();
         }
 
         if (awarenessMeter >= 0.76f)
