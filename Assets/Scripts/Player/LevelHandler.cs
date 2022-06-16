@@ -10,22 +10,23 @@ public class LevelHandler : MonoBehaviour
 
     void Update()
     {
-        if (enemyCount == maxEnemyCount)
+        if (enemyCount == maxEnemyCount && maxEnemyCount > 0)
             MainMenu();
     }
 
     public static void ResetLevel()
 	{
-        PlayerPrefs.SetInt("EnemiesKilled", PlayerPrefs.GetInt("EnemiesKilled") + 1);
-        enemyCount = 0;
+        PlayerPrefs.SetInt("EnemiesKilled", PlayerPrefs.GetInt("EnemiesKilled") + enemyCount);
+        enemyCount =  0;
         maxEnemyCount = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log(SceneManager.GetActiveScene().name);
     }
 
     public static void MainMenu()
 	{
         SetBestTime();
-        PlayerPrefs.SetInt("EnemiesKilled", PlayerPrefs.GetInt("EnemiesKilled") + 1);
+        PlayerPrefs.SetInt("EnemiesKilled", PlayerPrefs.GetInt("EnemiesKilled") + enemyCount);
         SceneManager.LoadScene("MainMenu");
 	}
 

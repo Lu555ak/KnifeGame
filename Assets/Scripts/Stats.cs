@@ -6,17 +6,19 @@ using UnityEngine.UI;
 public class Stats : MonoBehaviour
 {
     public Text level1, level2, level3, enemiesKilled;
-    // Start is called before the first frame update
+
     void Start()
     {
-        level1.text = "                x MIN x SEC";
-        level1.text = "                x MIN x SEC";
-        level1.text = "                x MIN x SEC";
-    }
+        Cursor.lockState = CursorLockMode.None;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        int time1 = PlayerPrefs.GetInt("TimeLevel1");
+        int time2 = PlayerPrefs.GetInt("TimeLevel2");
+        int time3 = PlayerPrefs.GetInt("TimeLevel3");
+
+
+        level1.text = "                " + Mathf.Round(time1 / 60) + " MIN " + Mathf.Round(time1 % 60) + " SEC";
+        level2.text = "                " + Mathf.Round(time2 / 60) + " MIN " + Mathf.Round(time2 % 60) + " SEC";
+        level3.text = "                " + Mathf.Round(time3 / 60) + " MIN " + Mathf.Round(time3 % 60) + " SEC";
+        enemiesKilled.text = "                                  " + PlayerPrefs.GetInt("EnemiesKilled");
     }
 }
