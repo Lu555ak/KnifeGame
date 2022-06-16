@@ -25,7 +25,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        Screen.lockCursor = true;
         Cursor.lockState = CursorLockMode.Locked;
         controller = GetComponent<CharacterController>();
         groundCheck = transform.GetChild(2);

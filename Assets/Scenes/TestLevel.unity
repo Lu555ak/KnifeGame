@@ -123,11 +123,35 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &27157201 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 13058cc68f78d1f4d8a9d186e8e0007d, type: 3}
+  m_PrefabInstance: {fileID: 922472300}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &27157202 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 13058cc68f78d1f4d8a9d186e8e0007d, type: 3}
   m_PrefabInstance: {fileID: 922472300}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &27157203
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27157201}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1b89db2e7bdb585488e14073e5326a52, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &354742888
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,6 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 1
+  animator: {fileID: 602623123}
 --- !u!54 &354742892
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -239,7 +264,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.851}
+  m_AnchoredPosition: {x: 0, y: 2.79}
   m_SizeDelta: {x: 1.25, y: 1.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &361126889
@@ -635,6 +660,31 @@ MonoBehaviour:
   playerInNearSightRange: 0
   playerInLongSightRange: 0
   bar: {fileID: 372268425}
+  spotPlayer: 0
+--- !u!1 &602623122 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a5e898c977ed493429105f0bfbe7f6e0, type: 3}
+  m_PrefabInstance: {fileID: 1052249796}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &602623123
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602623122}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 160ff739a8dc7974f94ebec4f3170b86, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &719368027
 GameObject:
   m_ObjectHideFlags: 0
@@ -968,11 +1018,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a5e898c977ed493429105f0bfbe7f6e0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -12.759619
+      value: -12.75962
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a5e898c977ed493429105f0bfbe7f6e0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -33.353107
+      value: -33.35311
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a5e898c977ed493429105f0bfbe7f6e0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1075,6 +1125,7 @@ MonoBehaviour:
   playerInNearSightRange: 0
   playerInLongSightRange: 0
   bar: {fileID: 1927358857}
+  spotPlayer: 0
 --- !u!195 &1191592459
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1448,6 +1499,8 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 128
+  x: 0
+  z: 0
 --- !u!1 &1637408785
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,7 +1666,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.898}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2062172586

@@ -31,33 +31,34 @@ public class EnemyMovement : MonoBehaviour
     private float inSight = 0.2f;
     private float cooldown = 0.5f;
     private float cooldownTimer = 0f;
+
+    private float patrolCooldown = 5f;
+    private float patrolCooldownTimer;
     public Image bar;
+    public bool spotPlayer = false;
 
+    private Animator animator;
 
-    private void Awake()
+    private void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
         enemy = GetComponent<NavMeshAgent>();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        animator = transform.GetComponentInChildren<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        //animator.SetBool("spotPlayer", spotPlayer);
         playerInNearSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInLongSightRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
 
 
         if (!playerInNearSightRange && !playerInLongSightRange)
         {
-            if (Time.time > cooldownTimer)
+            if (Time.time > patrolCooldownTimer)
             {
                 inSightMeter -= notInSight;
-                cooldownTimer = Time.time + cooldown;
+                patrolCooldownTimer = Time.time + patrolCooldown;
             }
             Patroling();
         }
@@ -116,6 +117,8 @@ public class EnemyMovement : MonoBehaviour
         //Walkpoint reached
         if (distanceToWalkPoint.magnitude < 1f)
             walkPointSet = false;
+
+        spotPlayer = false;
     }
 
     private void SearchWalkPoint()
@@ -132,27 +135,14 @@ public class EnemyMovement : MonoBehaviour
     private void ChasePlayer()
     {
         enemy.SetDestination(player.position);
+
+        spotPlayer = false;
     }
 
     private void SpotPlayer()
     {
-        //Make sure enemy doesn't move
         enemy.SetDestination(transform.position);
-
+        spotPlayer = true;
         transform.LookAt(player);
-
-        if(!alreadyAttacked)
-        {
-            //spot player code here
-            
-
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
-        }
-    }
-
-    private void ResetAttack()
-    {
-        alreadyAttacked = false;
     }
 }
