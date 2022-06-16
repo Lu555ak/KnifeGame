@@ -6,93 +6,187 @@ using UnityEngine.UI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public NavMeshAgent enemy;
+    public NavMeshAgent agent;
     public Transform player;
-    public LayerMask groundMask, playerMask;
 
-    //Patroling
-    public Vector3 walkPoint;
-    bool walkPointSet;
-    public float walkPointRange;
 
-    //Attacking
-    public float timeBetweenAttacks;
-    bool alreadyAttacked;
-
-    //States
-    public float sightRange, attackRange;
-    public bool playerInNearSightRange, playerInLongSightRange;
 
     //Sight
-    private float inSightMeter = 0f;
-    private float inNearSightMultiplier = 1.15f;
-    private float inLongSightMultiplier = 0.75f;
-    private float notInSight = 0.1f;
-    private float inSight = 0.2f;
-    private float cooldown = 0.5f;
-    private float cooldownTimer = 0f;
-
-    private float patrolCooldown = 5f;
-    private float patrolCooldownTimer;
+    private float awarenessMeter;
+    private float awarenessTimer;
     public Image bar;
-    public bool spotPlayer = false;
 
     private Animator animator;
+
+
+    private enum EnemyState { Patrolling, Attacking }
+    private EnemyState currentState = EnemyState.Patrolling;
+    private bool standing = false;
+    private Vector3[] patrolPoints;
+    private Vector3 destinationPoint;
+
+
+    private Camera enemyFOV;
+
+    [Header("Detection Settings")]
+    [SerializeField] private float sphereRadius = 8f;
+
+
+    private void GetPatrolPoints()
+    {
+        int childCount = GameObject.Find("PatrolPointLocations").transform.childCount;
+        patrolPoints = new Vector3[childCount];
+
+        for (int i = 0; i < childCount; i++)
+            patrolPoints[i] = GameObject.Find("PatrolPointLocations").transform.GetChild(i).transform.position;
+    }
 
     private void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
-        enemy = GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
         animator = transform.GetComponentInChildren<Animator>();
+        enemyFOV = GetComponentInChildren<Camera>();
+
+        agent.autoBraking = false;
+        GetPatrolPoints();
+        ChooseDestinationPoint();
     }
 
     void Update()
     {
-        //animator.SetBool("spotPlayer", spotPlayer);
-        playerInNearSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
-        playerInLongSightRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
+        Patrol();
 
+        SphereDetection();
+        ConeDetection();
 
-        if (!playerInNearSightRange && !playerInLongSightRange)
-        {
-            if (Time.time > patrolCooldownTimer)
-            {
-                inSightMeter -= notInSight;
-                patrolCooldownTimer = Time.time + patrolCooldown;
-            }
-            Patroling();
+        MoveTowardsPlayer();
+
+        AwarenessBar();
+
+        if (currentState != EnemyState.Attacking)
+             AwarenessFall(1f);
+
+        if (standing == true)
+		{
+            animator.SetBool("standing", standing);
+            agent.updateRotation = false;
+            agent.SetDestination(transform.position);
         }
-
-        if (playerInNearSightRange && !playerInLongSightRange)
-        {
-            if (Time.time > cooldownTimer)
-            {
-                inSightMeter += inSight * inNearSightMultiplier;
-                cooldownTimer = Time.time + cooldown;
-            }
-            ChasePlayer();
+		else
+		{
+            animator.SetBool("standing", standing);
+            agent.updateRotation = true;
         }
+    }
 
-        if (playerInNearSightRange && playerInLongSightRange)
-        {
-            if (Time.time > cooldownTimer)
-            {
-                inSightMeter += inSight * inLongSightMultiplier;
-                cooldownTimer = Time.time + cooldown;
-            }
-            SpotPlayer();
+
+    private void Patrol()
+    {
+        if(currentState == EnemyState.Patrolling)
+		{
+            agent.SetDestination(destinationPoint);
+            currentState = EnemyState.Patrolling;
+
+            DestinationPointReached();
         }
+    }
+    private void ChooseDestinationPoint()
+	{
+        destinationPoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+        Debug.Log(Random.Range(0, patrolPoints.Length - 1));
+    }
+    private void DestinationPointReached()
+	{
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+            ChooseDestinationPoint();
+	}
 
-        if(inSightMeter >= 1f)
+
+
+    private void MoveTowardsPlayer()
+	{
+        if(currentState == EnemyState.Attacking)
+		{
+            agent.SetDestination(player.position);
+        }         
+    }
+ 
+    private void SphereDetection()
+	{
+        RaycastHit hit;
+        Physics.Raycast(transform.position, (player.position - transform.position), out hit, Mathf.Infinity);
+
+        Collider[] sphereCollider = Physics.OverlapSphere(transform.position, sphereRadius, LayerMask.GetMask("Player"));
+        for (int i = 0; i < sphereCollider.Length; i++)
+        {
+            if (sphereCollider[i].CompareTag("Player") && hit.transform == player)
+			{
+                currentState = EnemyState.Attacking;
+                AwarenessRaise(0.5f);
+            }
+        }        
+    }
+
+    private void ConeDetection()
+	{
+        Vector3 screenPoint = enemyFOV.WorldToViewportPoint(player.position);
+        bool inFOV = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, (player.position - transform.position), out hit, Mathf.Infinity))
+        {
+            if (hit.transform == player && inFOV)
+            {
+                AwarenessRaise(1f);
+                standing = true;
+            }
+            else if (standing == true)
+			{
+                currentState = EnemyState.Patrolling;
+                standing = false;
+			}
+        }
+    }
+
+    private void AwarenessRaise(float cooldown)
+	{
+        if(Time.time > awarenessTimer)
+		{
+            awarenessMeter += 0.1f;
+
+            if (awarenessMeter >= 1)
+                awarenessMeter = 1;
+
+            awarenessTimer = Time.time + cooldown;
+        }
+	}
+
+    private void AwarenessFall(float cooldown)
+    {
+        if (Time.time > awarenessTimer)
+        {
+            awarenessMeter -= 0.1f;
+
+            if (awarenessMeter <= 0)
+                awarenessMeter = 0;
+
+            awarenessTimer = Time.time + cooldown;
+        }
+    }
+
+    private void AwarenessBar()
+	{
+        if (awarenessMeter >= 1f)
         {
             Debug.Log(":)");
         }
 
-        if(inSightMeter >= 0.76f)
+        if (awarenessMeter >= 0.76f)
         {
             bar.color = new Color32(255, 0, 0, 255);
         }
-        else if(inSightMeter >= 0.51 && inSightMeter <= 0.75f)
+        else if (awarenessMeter >= 0.51 && awarenessMeter <= 0.75f)
         {
             bar.color = new Color32(255, 255, 0, 255);
         }
@@ -101,48 +195,13 @@ public class EnemyMovement : MonoBehaviour
             bar.color = new Color32(0, 128, 0, 255);
         }
 
-        bar.fillAmount = inSightMeter;
+        bar.fillAmount = awarenessMeter;
     }
 
-    private void Patroling()
-    {
-        if (!walkPointSet)
-            SearchWalkPoint();
+	private void OnDrawGizmos()
+	{
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, sphereRadius);
 
-        if (walkPointSet)
-            enemy.SetDestination(walkPoint);
-
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-        //Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
-
-        spotPlayer = false;
-    }
-
-    private void SearchWalkPoint()
-    {
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, groundMask))
-            walkPointSet = true;
-    }
-
-    private void ChasePlayer()
-    {
-        enemy.SetDestination(player.position);
-
-        spotPlayer = false;
-    }
-
-    private void SpotPlayer()
-    {
-        enemy.SetDestination(transform.position);
-        spotPlayer = true;
-        transform.LookAt(player);
     }
 }
