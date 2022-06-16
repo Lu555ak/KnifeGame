@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public NavMeshAgent agent;
-    public Transform player;
+    private NavMeshAgent agent;
+    private Transform player;
 
 
 
