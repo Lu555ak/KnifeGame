@@ -15,8 +15,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private LayerMask groundMask;
 
-    private float x;
-    private float z;
+    public float x;
+    public float z;
     private CharacterController controller;
     private Vector3 velocity;
     private Transform groundCheck;
